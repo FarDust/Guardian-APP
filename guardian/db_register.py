@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import pymongo
 
-from api_driver import *
+from guardian.api_driver import *
 from config import *
 from pymongo import MongoClient
 
@@ -32,7 +32,8 @@ def add_security_lvl(img, security_lvl, info=dict()):
                         with open(path, 'wb') as file:
                             file.write(img)
                             info.update({'path': path})
-                        info.update({'_id': persisted_face_id['persistedFaceId']})
+                        info.update(
+                            {'_id': persisted_face_id['persistedFaceId']})
                     else:
                         raise type('ImageNotAllowed', (Exception,), {})()
                     collection.insert_one(info)
@@ -41,7 +42,8 @@ def add_security_lvl(img, security_lvl, info=dict()):
                     if isinstance(image, list):
                         for pic in image:
                             if 'persistedFaceId' in pic:
-                                collection.update({"_id": pic["persistedFaceId"]}, {"$set": info})
+                                collection.update(
+                                    {"_id": pic["persistedFaceId"]}, {"$set": info})
                     return image
             return {"error": "image_not_found"}
         else:
@@ -74,9 +76,9 @@ def ask_info(img):
                         collection.update({'_id': persistedFaceId['persistedFaceId']},
                                           {"$set": {"path": path}})
                 if "path" in response:
-                    response.pop("path",0)
+                    response.pop("path", 0)
                 if "nombre" in response:
-                    response["name"]=response.pop("nombre")
+                    response["name"] = response.pop("nombre")
             else:
                 response.update({"security_lvl": 'disallowed'})
             return response
@@ -88,8 +90,9 @@ def ask_info(img):
 
 def ask_log():
     return collection.find(
-        {"timestamp": {"$gte": (datetime.now() - timedelta(days=1)).isoformat(), "$lt": datetime.now().isoformat()}},
-        {"timestamp": 1, "name": 1,"nombre":1, "_id": 0})
+        {"timestamp": {"$gte": (datetime.now() - timedelta(days=1)
+                                ).isoformat(), "$lt": datetime.now().isoformat()}},
+        {"timestamp": 1, "name": 1, "nombre": 1, "_id": 0})
 
 
 if __name__ == "__main__":

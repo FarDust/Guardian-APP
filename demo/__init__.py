@@ -4,7 +4,6 @@ from threading import Thread
 
 from PyQt5.QtMultimedia import QSound
 
-from config import *
 
 from PyQt5 import QtGui
 
@@ -13,11 +12,13 @@ from PyQt5.QtGui import QPixmap, QImage, QPainter, QIcon
 from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QComboBox, \
     QPushButton, QTextEdit
 
+from config import *
+from guardian.db_register import ask_info, add_security_lvl, ask_log
+
 import cv2
 import json
-from db_register import ask_info, add_security_lvl, ask_log
 
-with open("url.secret", "r") as file:
+with open("config/url.secret", "r") as file:
     base = file.readline().strip()
 
 BASE_URL = base.format(
@@ -72,7 +73,7 @@ def parse_info(info):
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        read_styles("styles/master.css", self)
+        read_styles("demo/styles/master.css", self)
         self.setWindowTitle("Guardian")
         self.setWindowIcon(QIcon('favicon.png'))
         self.setObjectName("body")
@@ -147,12 +148,13 @@ class Main(QWidget):
 
 
 class VideoCapture(QWidget):
-    faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    faceCascade = cv2.CascadeClassifier(
+        "config/haarcascade_frontalface_default.xml")
 
     def __init__(self, parent=None):
         super(QWidget, self).__init__()
         read_styles("styles/master.css", self)
-        self.cap = cv2.VideoCapture(BASE_URL)
+        self.cap = cv2.VideoCapture(0)
         self.video_frame = QLabel()
         self.video_frame.setObjectName("camera")
         self.setObjectName("camera-container")
