@@ -1,5 +1,6 @@
 .ftpconfig
 security_check/*
+*.secret
 
 # Created by https://www.gitignore.io/api/macos,linux,python,windows,pycharm
 
