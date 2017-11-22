@@ -22,7 +22,11 @@ def after_request(response):
     header['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept"
     return response
 
+
 from watcher.mod_api.views import mod_api as api_module
+from watcher.guardian.views import guardian as stream
+
 
 app.register_blueprint(api_module)
+app.register_blueprint(stream)
 # app.register_blueprint(<another module>)

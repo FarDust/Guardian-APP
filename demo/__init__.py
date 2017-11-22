@@ -18,7 +18,7 @@ from guardian.db_register import ask_info, add_security_lvl, ask_log
 import cv2
 import json
 
-with open("config/url.secret", "r") as file:
+with open(os.path.join(BASE_DIR, 'static', 'url.secret'), "r") as file:
     base = file.readline().strip()
 
 BASE_URL = base.format(
@@ -73,7 +73,8 @@ def parse_info(info):
 class Main(QWidget):
     def __init__(self):
         super().__init__()
-        read_styles("demo/styles/master.css", self)
+        read_styles(os.path.join(BASE_DIR, 'demo',
+                                 'styles', 'master.css'), self)
         self.setWindowTitle("Guardian")
         self.setWindowIcon(QIcon('favicon.png'))
         self.setObjectName("body")
@@ -148,12 +149,13 @@ class Main(QWidget):
 
 
 class VideoCapture(QWidget):
-    faceCascade = cv2.CascadeClassifier(
-        "config/haarcascade_frontalface_default.xml")
+    faceCascade = cv2.CascadeClassifier(os.path.join(
+        BASE_DIR, 'static', 'haarcascade_frontalface_default.xml'))
 
     def __init__(self, parent=None):
         super(QWidget, self).__init__()
-        read_styles("styles/master.css", self)
+        read_styles(os.path.join(BASE_DIR, 'demo',
+                                 'styles', 'master.css'), self)
         self.cap = cv2.VideoCapture(0)
         self.video_frame = QLabel()
         self.video_frame.setObjectName("camera")

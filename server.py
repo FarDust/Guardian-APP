@@ -3,6 +3,7 @@ from json import JSONDecodeError
 from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM
 from threading import Lock, Thread, Barrier
 from uuid import uuid4
+from guardian.camera import Camera as Cam
 
 HOST = '127.0.0.1'
 PORT = 2550
