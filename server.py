@@ -24,7 +24,7 @@ class Server:
         self.clients = dict()
         self.exit = False
         self.manage = Thread(target=self.connection_manager,
-                             daemon=False, name="manager", args=())
+                             daemon=True, name="manager", args=())
 
     def connection_manager(self):
 
@@ -111,7 +111,7 @@ class Client:
         self.udp = link2
         self.lock = Lock()
         self.exclusive_lock = Lock()
-        self.barrier = Barrier()
+        self.barrier = Barrier(2, timeout=5)
         self.exit = False
 
 
@@ -121,6 +121,7 @@ if __name__ == "__main__":
         with server:
             last = ""
             while True:
+                server.camera.nextFrameSlot()
                 current = server.camera.current
                 if last != current:
                     print(current)
