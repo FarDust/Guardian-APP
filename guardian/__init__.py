@@ -1,17 +1,24 @@
 from threading import Thread, Timer
-from local import parse_info
-from db_register import ask_info
 import cv2
+import os
 
-LOCALHOST = '127.0.0.1'
 
-HOST = None
-PORT = 5005
-UDP_TARGET = None
+if __name__ != "__main__":
+    from guardian.utils import parse_info
+    from guardian.db_register import ask_info
+    from config import *
+else:
+    from utils import parse_info
+#    from db_register import ask_info
+    BASE_DIR = ".."
+
+
+__all__ = ['Camera']
 
 
 class Camera():
-    faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    faceCascade = cv2.CascadeClassifier(os.path.join(
+        BASE_DIR, 'static', 'haarcascade_frontalface_default.xml'))
 
     def __init__(self, source=0):
         self.cap = cv2.VideoCapture(source)
@@ -23,7 +30,8 @@ class Camera():
         self._concurrence = 0
         self.discurrence = 0
         self.calling = False
-        self.nextFrameSlot()
+        self.started = False
+        # self.nextFrameSlot()
 
     def minion(self, bits):
         self.current = "Face found: calling API..."
@@ -59,7 +67,8 @@ class Camera():
                     th.start()
                     self.discurrence = 0
                 elif self._concurrence < 12:
-                    self.current = "Face found: preparing release data in {}".format(12 - self._concurrence)
+                    self.current = "Face found: preparing release data in {}".format(
+                        12 - self._concurrence)
                 self._concurrence += 1
                 self.discurrence = 0
             self.faces = len(faces)
@@ -72,16 +81,35 @@ class Camera():
             if self.discurrence > 12:
                 self.current = "No face found: waiting..."
             else:
-                self.current = "No face found: preparig API call in {}".format(12 - self.discurrence)
-        self.video_frame = bytes(cv2.imencode('.bmp', frame)[1].tostring())
+                self.current = "No face found: preparig API call in {}".format(
+                    12 - self.discurrence)
+        self.video_frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        print('frame...')
+
+    def get_frame(self):
+        ret, frame = self.cap.read()
+        return cv2.imencode('.jpg', frame)[1].tobytes()
 
     def start(self):
+        if DEBUG:
+            print('starting Timer...')
         self.timer = Timer(1.0 / 30, self.nextFrameSlot)
         self.timer.start()
 
     def stop(self):
         self.timer.cancel()
+
+    def release():
         self.cap.release()
+
+    def __iter__(self):
+        while True:
+            yield self.video_frame
+
+    def __next__(self):
+        frame = self.__iter__()
+        while True:
+            return next(frame)
 
     def __repr__(self):
         string = str()
@@ -95,14 +123,13 @@ class Camera():
 
     def __enter__(self):
         self.start()
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
 
-if __name__ == '__main__':
-    first = Camera()
-    with first:
-        with open("testing.bmp", "wb") as file:
-            file.write(first.video_frame)
-        print(repr(first))
+if __name__ == "__main__":
+    with render:
+        while True:
+            print(next(render))

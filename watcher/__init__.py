@@ -3,6 +3,8 @@ from flask import Flask, Response
 import json
 # Importar modulo de la base de datos
 
+from flask import Flask
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -24,7 +26,7 @@ def after_request(response):
 
 
 from watcher.mod_api.views import mod_api as api_module
-from watcher.guardian.views import guardian as stream
+from watcher.feeds.views import feeds as stream
 
 
 app.register_blueprint(api_module)

@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
 
 import pymongo
-
-from guardian.api_driver import *
-from config import *
 from pymongo import MongoClient
+
+try:
+    from guardian.api_driver import *
+    from config import *
+except ModuleNotFoundError:
+    from api_driver import *
 
 if __name__ == '__main__':
     DB = 'face-security'
@@ -27,7 +30,7 @@ def add_security_lvl(img, security_lvl, info=dict()):
                 if isinstance(image, list) and not len(image) > 0 or 'error' in image:
                     persisted_face_id = add_face(SECURITY_LIST, img)
                     if 'persistedFaceId' in persisted_face_id:
-                        path = os.path.join(os.getcwd(), "security_check",
+                        path = os.path.join(BASE_DIR, "security_check",
                                             "{}.bmp".format(persisted_face_id['persistedFaceId']))
                         with open(path, 'wb') as file:
                             file.write(img)
