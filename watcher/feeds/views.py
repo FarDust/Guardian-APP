@@ -2,11 +2,14 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify, Response
 # import flask_bootstrap
 import json
+from watcher import render
+
+render.start()
 
 
-def gen(cam):
+def gen():
     while True:
-        frame = cam.get_frame()
+        frame = render.get_frame()
         yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
@@ -20,6 +23,5 @@ def index():
 
 @feeds.route('/video_feed')
 def video_feed():
-    render.start()
-    return Response(gen(render),
+    return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')

@@ -31,8 +31,7 @@ class Camera():
         self.discurrence = 0
         self.calling = False
         self.started = False
-        self.timer = None
-        self.nextFrameSlot()
+        # self.nextFrameSlot()
 
     def minion(self, bits):
         self.current = "Face found: calling API..."
@@ -85,8 +84,6 @@ class Camera():
                 self.current = "No face found: preparig API call in {}".format(
                     12 - self.discurrence)
         self.video_frame = cv2.imencode('.jpg', frame)[1].tobytes()
-        if DEBUG:
-            print("frame...")
 
     def get_frame(self):
         ret, frame = self.cap.read()
@@ -95,8 +92,7 @@ class Camera():
     def start(self):
         if DEBUG:
             print('starting Timer...')
-        self.timer = Timer(interval=1.0 / 30, function=self.nextFrameSlot)
-        self.timer.daemon = True
+        self.timer = Timer(1, function=self.nextFrameSlot)
         self.timer.start()
 
     def stop(self):

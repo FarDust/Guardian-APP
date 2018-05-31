@@ -24,7 +24,7 @@ class Server:
         self.clients = dict()
         self.exit = False
         self.manage = Thread(target=self.connection_manager,
-                             daemon=True, name="manager", args=())
+                             daemon=False, name="manager", args=())
 
     def connection_manager(self):
 
