@@ -1,3 +1,4 @@
+.vscode/*
 .ftpconfig
 security_check/*
 *.secret

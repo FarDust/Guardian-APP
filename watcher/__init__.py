@@ -4,7 +4,8 @@ import json
 # Importar modulo de la base de datos
 
 from flask import Flask
-from guardian import render
+from guardian import Camera
+render = Camera()
 
 
 app = Flask(__name__)
