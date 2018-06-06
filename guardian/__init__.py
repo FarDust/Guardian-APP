@@ -1,26 +1,25 @@
 from threading import Thread, Timer
-import cv2
 import os
+import cv2
+import time
 
-
-if __name__ != "__main__":
-    from guardian.utils import parse_info
-    from guardian.db_register import ask_info
-    from config import *
-else:
-    from utils import parse_info
-#    from db_register import ask_info
-    BASE_DIR = ".."
+from guardian.utils import parse_info
+from guardian.db_register import ask_info
+from config import *
 
 
 __all__ = ['Camera']
 
+if not 'CLASIFIER' in locals():
+    FACE_CLASIFIER = 'haarcascade_frontalface_default.xml'
 
 class Camera():
-    faceCascade = cv2.CascadeClassifier(os.path.join(
-        BASE_DIR, 'static', 'haarcascade_frontalface_default.xml'))
+    faceCascade = cv2.CascadeClassifier(os.path.join(STATIC_DIR,FACE_CLASIFIER))
+    unique_instance = None
 
-    def __init__(self, source=0):
+    def __init__(self, source= 0):
+        if self.unique_instance != None:
+            return self.unique_instance
         self.cap = cv2.VideoCapture(source)
         self.video_frame = b''
         self.faces = 0
@@ -30,9 +29,8 @@ class Camera():
         self._concurrence = 0
         self.discurrence = 0
         self.calling = False
-        self.started = False
-        self.timer = None
         self.nextFrameSlot()
+        self.unique_instance = self
 
     def minion(self, bits):
         self.current = "Face found: calling API..."
@@ -48,9 +46,8 @@ class Camera():
         self.calling = False
 
     def nextFrameSlot(self):
-        ret, frame = self.cap.read()
-        frame = cv2.flip(frame, 1)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        _, frame = self.cap.read()
+        gray = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2GRAY)
         faces = self.faceCascade.detectMultiScale(
             gray,
             scaleFactor=1.1,
@@ -85,8 +82,6 @@ class Camera():
                 self.current = "No face found: preparig API call in {}".format(
                     12 - self.discurrence)
         self.video_frame = cv2.imencode('.jpg', frame)[1].tobytes()
-        if DEBUG:
-            print("frame...")
 
     def get_frame(self):
         ret, frame = self.cap.read()
@@ -95,19 +90,20 @@ class Camera():
     def start(self):
         if DEBUG:
             print('starting Timer...')
-        self.timer = Timer(interval=1.0 / 30, function=self.nextFrameSlot)
-        self.timer.daemon = True
+        self.timer = Timer(1, function=self.nextFrameSlot)
         self.timer.start()
 
     def stop(self):
         self.timer.cancel()
 
-    def release():
+    def release(self):
         self.cap.release()
 
     def __iter__(self):
+        last = time.time()
         while True:
-            yield self.video_frame
+            if time.time() - last >= 1/60:
+                yield self.video_frame
 
     def __next__(self):
         frame = self.__iter__()
@@ -132,7 +128,3 @@ class Camera():
         self.stop()
 
 
-if __name__ == "__main__":
-    with render:
-        while True:
-            print(next(render))

@@ -4,7 +4,7 @@ import os
 from requests import Session, Request
 import uuid
 
-_KEY = 'a1bec38521eb4b8892394b4c19c50933'
+_KEY = '<secret>'
 
 _URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0'
 
