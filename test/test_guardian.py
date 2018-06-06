@@ -22,9 +22,15 @@ class GuardianHandlerTest(unittest.TestCase):
         firt_handler = Guardian_Handler(bytes())
         firt_handler.start()
         firt_handler.join()
-        self.assertEqual(firt_handler.state,-1)
+        self.assertEqual(firt_handler.state_object.value,-1)
 
-    
+    def  test_handler_face(self):
+        with open(os.path.join('test','samples','face.jpg'),'rb') as file:
+            firt_handler = Guardian_Handler(file.read())
+            state = firt_handler.state_object
+            firt_handler.start()
+            firt_handler.join()
+            self.assertEqual(state.value,1)
 
 if __name__ == "__main__":
     test = GuardianTest()

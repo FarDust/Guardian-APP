@@ -1,8 +1,8 @@
-.vscode/*
 .ftpconfig
 security_check/*
 *.secret
 .ftpignore
+!*.keep
 
 # Created by https://www.gitignore.io/api/macos,linux,python,windows,pycharm
 
@@ -302,3 +302,16 @@ fabric.properties
 .idea/
 
 # End of https://www.gitignore.io/api/pycharm+all
+
+# Created by https://www.gitignore.io/api/visualstudiocode
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+
+# End of https://www.gitignore.io/api/visualstudiocode
