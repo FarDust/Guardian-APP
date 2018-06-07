@@ -1,7 +1,12 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 script:
-  - python -m unittest discover test
+- python -m unittest discover test
 services:
-  - mongodb
+- mongodb
+env:
+  matrix:
+    FACE_API_URL: 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0'
+    CAMERA_URL: '0'
+    secure: OIL633GHjjlQBVL71HkZyUDYiVX/if6M5hKiaXdlj3vQcUmNy9GLDOb8pzAZfb8LEkVv9q/D2bkOXUJZ5DtpmeRH82N49YjXFy6k3UulTpRgfwQZCabxwy9N4oaSvBlUNhb08VaU1X5BOxf0VoL+8BAaivUc5KTIRyxyb5iqg5fjgz9ErEMYctTRV1wNe4DXne2evHp/NH+7juDHoyhMMhi1oHncrh+uJzvozIdgetDp/UEkc6JPYMcwzOQqNIckUrRp2p4oethxdYyN7ZLQQ2QWmIkZrrtKHcWhuv3cxwER2rfU6I0HAcylwqFv2xRGF8WuvQigMzcyZKq29JT4Zx+P7JIyENhrzIsrVVllsrqqb1ClNors0W8Dtp+o6qQ19w5RWHYksBQIWYNB3xnYrfce32IhvKWo6F+hU5+VjFuOTa5BaIuX5C1sGFPiPkUXPHPwvZ71wCV33lF7mAP+NQBBNC56RN/nidtPxeZRK6xxMqYICS84IllaHg1loAuM0xreHjsKgsGbpMTLsrh8ca4pawYG53ECwy5f1r3AJBr/ik7XXU03cQtiLYI5eGorESKEuC5GsKTc0TZxkrbxQdzCGHII3w8q9A5hi5isBWmdoSOdD3djKMWAL2xnyIMxGe5Sz6HGRd/rWv2e+2yyER2H0jJHNeNuvjdta5ybEHs=
