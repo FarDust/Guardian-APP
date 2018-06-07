@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
+from config import *
 
 from demo import Main
 

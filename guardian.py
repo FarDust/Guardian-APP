@@ -1,7 +1,9 @@
+from config import *
 from guardian import Camera
+
 
 render = Camera()
 
-with render:
+with render as cam:
     while True:
-        pass
+        next(cam)
