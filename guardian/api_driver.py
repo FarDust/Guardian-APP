@@ -4,9 +4,8 @@ import os
 from requests import Session, Request
 import uuid
 
-_KEY = '<secret>'
-
-_URL = 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0'
+_KEY = os.getenv('FACE_API_KEY')
+_URL = os.getenv('FACE_API_URL')
 
 
 def comparison(face_id, face_list_id):

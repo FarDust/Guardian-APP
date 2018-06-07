@@ -8,14 +8,14 @@ class Handler(Thread,metaclass=ABCMeta):
 
     def __init__(self):
         self.message = bytes()
-        self._current_state = int()
+        self._current_state = type('state',tuple() , {'value': int(), 'data': str()})
         super().__init__()
 
     def run(self):
         pass
 
     @property
-    def state(self):
+    def state_object(self):
         return self._current_state
 
 class Guardian_Handler(Handler):
@@ -28,13 +28,14 @@ class Guardian_Handler(Handler):
         else:
             raise TypeError('bytes required for this handler')
         self.daemon = True
-    
+
     def run(self):
         with self.lock:
-            self._current_state = 0 # "Face found: calling API..."
+            self._current_state.value = 0 # "Face found"
             response = ask_info(self.message)
             if not "error" in response:
-                self._current_state = 1 # "Face detected"
-                return parse_info(response)
+                self._current_state.value = 1 # "Face detected"
+                self._current_state.data = parse_info(response)
             else:
-                self._current_state = -1 #"Error: {}".format(responce)
+                self._current_state.value = -1 # Error
+                self._current_state.data = "Error: {}".format(response)
