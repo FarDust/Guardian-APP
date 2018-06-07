@@ -18,13 +18,6 @@ from guardian.db_register import ask_info, add_security_lvl, ask_log
 import cv2
 import json
 
-with open(os.path.join(BASE_DIR, 'static', 'url.secret'), "r") as file:
-    base = file.readline().strip()
-
-BASE_URL = base.format(
-    **{"user": "admin", "password": "V3Y1dWdncmZCeFdBWXNhRg=="})
-
-
 def photo_id():
     i = 0
     while True:
